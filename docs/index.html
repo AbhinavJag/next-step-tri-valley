@@ -7,16 +7,16 @@
 <meta name="description" content="A free tool for workers in Dublin, Pleasanton and Livermore. Look up your job's AI exposure, find nearby jobs that use your skills, local training, and your unemployment estimate.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f6f5c'/%3E%3Cpath d='M9 21l6-6 4 4 5-7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312284a'/%3E%3Ccircle cx='22' cy='11' r='3.5' fill='%23f2b632'/%3E%3Cpath d='M0 26 Q8 14 16 21 T32 18 V32 H0Z' fill='%23f2b632'/%3E%3C/svg%3E">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top">
   <div class="wrap top-in">
     <a class="brand" href="#/">
-      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="currentColor"/><path d="M9 21l6-6 4 4 5-7" stroke="var(--bg)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg class="brand-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="currentColor"/><circle cx="22" cy="11" r="3.5" fill="#f2b632"/><path d="M0 26 Q8 14 16 21 T32 18 V32 H0Z" fill="#f2b632"/></svg>
       <span>Next Step <b>Tri-Valley</b></span>
     </a>
     <nav class="nav" aria-label="Main">
@@ -31,23 +31,30 @@
 <main id="main" class="wrap">
   <!-- JOB VIEW -->
   <section id="view-job" class="view">
+    <div class="hero-panel">
     <div class="hero">
-      <p class="eyebrow">For workers in Dublin, Pleasanton and Livermore</p>
-      <h1>Your job is changing.<br>Here's what's close by.</h1>
-      <p class="lede">Type your job. You'll see how much of it overlaps with what AI can do, what it pays here, the jobs that use the skills you already have, and where to train for them nearby. It's free and nothing you type leaves your browser.</p>
-      <div class="search" role="combobox" aria-expanded="false" aria-owns="suggest" aria-haspopup="listbox">
-        <label for="q" class="sr">Your job title</label>
-        <svg class="search-ic" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="q" type="search" autocomplete="off" placeholder="Try &quot;receptionist&quot;, &quot;bookkeeper&quot; or &quot;customer service&quot;" aria-autocomplete="list" aria-controls="suggest">
-        <ul id="suggest" role="listbox" hidden></ul>
+        <p class="eyebrow">For workers in Dublin, Pleasanton and Livermore</p>
+        <h1>Your job is changing.<br><em>Here's what's close by.</em></h1>
+        <p class="lede">Type your job. You'll see how much of it overlaps with what AI can do, what it pays here, the jobs that use the skills you already have, and where to train for them nearby. It's free and nothing you type leaves your browser.</p>
+        <div class="search" role="combobox" aria-expanded="false" aria-owns="suggest" aria-haspopup="listbox">
+          <label for="q" class="sr">Your job title</label>
+          <svg class="search-ic" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input id="q" type="search" autocomplete="off" placeholder="Try &quot;receptionist&quot;, &quot;bookkeeper&quot; or &quot;customer service&quot;" aria-autocomplete="list" aria-controls="suggest">
+          <ul id="suggest" role="listbox" hidden></ul>
+        </div>
+        <p class="try">Common in the Tri-Valley:
+          <button class="chip-btn" data-soc="43-9061">Office clerk</button>
+          <button class="chip-btn" data-soc="43-4051">Customer service</button>
+          <button class="chip-btn" data-soc="43-3031">Bookkeeping</button>
+          <button class="chip-btn" data-soc="43-6013">Medical secretary</button>
+          <button class="chip-btn" data-soc="41-2031">Retail sales</button>
+        </p>
       </div>
-      <p class="try">Common in the Tri-Valley:
-        <button class="chip-btn" data-soc="43-9061">Office clerk</button>
-        <button class="chip-btn" data-soc="43-4051">Customer service</button>
-        <button class="chip-btn" data-soc="43-3031">Bookkeeping</button>
-        <button class="chip-btn" data-soc="43-6013">Medical secretary</button>
-        <button class="chip-btn" data-soc="41-2031">Retail sales</button>
-      </p>
+      <svg class="hills" viewBox="0 0 1200 130" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 70 C150 20 260 30 380 62 S640 110 780 58 S1040 10 1200 48 V130 H0Z" fill="#2c5490"/>
+        <path d="M0 96 C120 60 240 64 360 88 S600 128 760 92 S1020 52 1200 82 V130 H0Z" fill="#e9ad2c"/>
+        <path d="M0 118 C200 96 340 100 520 114 S860 132 1200 106 V130 H0Z" fill="#c98a0b"/>
+      </svg>
     </div>
     <div id="result" aria-live="polite"></div>
   </section>
