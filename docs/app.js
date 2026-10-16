@@ -109,17 +109,22 @@
 
   function payDelta(from, to) {
     const d = (to - from) / from;
-    if (Math.abs(d) < 0.03) return `<span class="delta muted">about the same</span>`;
-    return `<span class="delta ${d > 0 ? "up" : "down"}">${d > 0 ? "+" : "−"}${money(Math.abs(to - from))}</span>`;
+    if (Math.abs(d) < 0.03) return `<span class="delta same">About the same pay</span>`;
+    return `<span class="delta ${d > 0 ? "up" : "down"}">${d > 0 ? "▲ " : "▼ "}${money(Math.abs(to - from))}</span>`;
   }
+  const bandWord = b => b === "lower" ? "Lower" : b === "medium" ? "Medium" : "High";
 
   function jobRows(socs, base) {
     return socs.map(s => JOBS[s]).map(j => `
       <li>
-        <div><button class="jt" data-go="${j.s}">${esc(j.t)}</button><div class="small muted">${k(j.e || 0)} jobs in the metro area</div></div>
-        <span class="band ${j.b}" title="${j.x}th percentile of AI exposure">${j.b === "lower" ? "Lower" : j.b === "medium" ? "Medium" : "High"} · ${j.x}</span>
-        <div class="pay"><div>${money(j.m)}</div>${payDelta(base.m, j.m)}</div>
+        <div><button class="jt" data-go="${j.s}">${esc(j.t)}</button><div class="meta">${k(j.e || 0)} jobs in the metro area</div></div>
+        <span class="band ${j.b}" title="More exposed to AI than ${j.x}% of jobs">${bandWord(j.b)} AI · ${j.x}</span>
+        <div class="pay">${money(j.m)}${payDelta(base.m, j.m)}</div>
       </li>`).join("");
+  }
+
+  function sectionTitle(chip, color, title, sub) {
+    return `<div class="section-title"><span class="line-chip" style="background:${color}">${chip}</span><h2>${title}</h2>${sub ? `<span class="sub">${sub}</span>` : ""}</div>`;
   }
 
   function showJob(soc) {
@@ -132,55 +137,55 @@
     j.mv.forEach(s => addProgs(s, JOBS[s].t));
     j.n.forEach(s => addProgs(s, JOBS[s].t));
     const progs = [...progIdx].map(i => [i, D.programs[i]]).sort((a, b) => (b[1].cost === "tuition-free") - (a[1].cost === "tuition-free"));
+    const segColor = j.b === "high" ? "var(--r)" : j.b === "medium" ? "var(--o)" : "var(--g)";
+    const lit = Math.round(j.x / 10);
 
     $("#result").innerHTML = `
-      <article class="card" aria-labelledby="jt">
-        <div class="job-head">
-          <div>
-            <h2 id="jt">${esc(j.t)}</h2>
-            <div class="muted small">Pay and job counts for the San Francisco-Oakland-Fremont metro area, which includes the Tri-Valley (BLS, May 2025)</div>
-          </div>
-          <span class="band ${j.b}">${BAND_LABEL[j.b]}</span>
+      <article class="station" aria-labelledby="jt">
+        <div class="station-head">
+          <h2 id="jt">${esc(j.t)}</h2>
+          <span class="here">You are here</span>
         </div>
-        <div class="stat-row">
-          <div class="stat"><div class="k">Typical pay here</div><div class="v">${money(j.m)}</div><div class="s">Middle half earns ${money(j.p25)} to ${money(j.p75)}</div></div>
-          <div class="stat"><div class="k">People doing this job</div><div class="v">${(j.e || 0).toLocaleString("en-US")}</div><div class="s">in the metro area</div></div>
-          <div class="stat"><div class="k">AI exposure</div><div class="v">${j.x}<span class="small muted"> / 100</span></div><div class="s">More exposed than ${j.x}% of jobs</div></div>
+        <div class="board">
+          <div><div class="k">Typical pay here</div><div class="v">${money(j.m)}</div><div class="s">Middle half: ${money(j.p25)} to ${money(j.p75)}</div></div>
+          <div><div class="k">People doing this job</div><div class="v">${(j.e || 0).toLocaleString("en-US")}</div><div class="s">in the metro area</div></div>
+          <div><div class="k">AI exposure</div><div class="v">${j.x}<span style="font-size:20px;color:#bbb"> / 100</span></div><div class="s">More exposed than ${j.x}% of jobs</div></div>
         </div>
-        <div class="meter" role="img" aria-label="AI exposure: ${j.x} out of 100">
-          <div class="meter-track"><div class="meter-dot" style="left:${Math.min(98, Math.max(2, j.x))}%"></div></div>
-          <div class="meter-scale"><span>Less exposed</span><span>More exposed</span></div>
+        <div class="station-body">
+          <div class="segs" role="img" aria-label="AI exposure ${j.x} out of 100, ${BAND_LABEL[j.b]}" style="--c:${segColor}">${Array.from({ length: 10 }, (_, i) => `<i class="${i < lit ? "on" : ""}"></i>`).join("")}</div>
+          <div class="seg-scale"><span>Less exposed</span><span class="band ${j.b}">${BAND_LABEL[j.b]}</span><span>More exposed</span></div>
+          <p class="callout">${BAND_TEXT[j.b]}</p>
+          ${zone ? `<p class="small muted" style="margin:0">How people usually get this job: ${esc(zone)}.</p>` : ""}
+          <p class="small muted" style="margin:6px 0 0">Pay and job counts are for the San Francisco-Oakland-Fremont metro area, which includes the Tri-Valley (BLS, May 2025).</p>
         </div>
-        <p class="callout">${BAND_TEXT[j.b]}</p>
-        ${zone ? `<p class="small muted">How people usually get this job: ${esc(zone)}.</p>` : ""}
       </article>
 
-      <div class="section-title"><h2>Moves toward less AI exposure</h2><span class="small muted">Close to your skills, pays at least 85% of what you make now</span></div>
-      <div class="card">${j.mv.length ? `<ul class="list">${jobRows(j.mv, j)}</ul>
-        <p class="small muted" style="margin:12px 0 0">These come from O*NET's list of related jobs (one or two steps from yours). They're starting points, not guarantees. Click any job to see its own pay and next steps.</p>`
-        : `<p class="empty">${j.b === "lower" ? "Your job already has lower AI exposure than most. The jobs below use similar skills if you want to move up or across." : "We didn't find a nearby job that's clearly less exposed and pays close to what you make now. The similar jobs below are still worth a look, and the training section shows where to build a new skill."}</p>`}
+      ${sectionTitle("1", "var(--y)", "Next stops: less AI exposure", "Close to your skills, and pays at least 85% of what you make now")}
+      <div class="card">${j.mv.length ? `<ul class="route y">${jobRows(j.mv, j)}</ul>
+        <p class="route-note">From O*NET's list of related jobs, one or two steps from yours. Starting points, not guarantees. Tap any stop to see its own next stops.</p>`
+        : `<p class="empty">${j.b === "lower" ? "Your job already has lower AI exposure than most. The jobs below use similar skills if you want to move up or across." : "We didn't find a nearby job that's clearly less exposed and pays close to what you make now. The jobs below still use your skills, and the training section shows where to build a new one."}</p>`}
       </div>
 
-      <div class="section-title"><h2>Jobs that use the skills you already have</h2><span class="small muted">From O*NET's related-jobs list</span></div>
-      <div class="card">${j.n.length ? `<ul class="list">${jobRows(j.n, j)}</ul>` : `<p class="empty">O*NET doesn't list related jobs for this one.</p>`}</div>
+      ${sectionTitle("2", "var(--b)", "Jobs on the same line", "They use the skills you already have (O*NET related jobs)")}
+      <div class="card">${j.n.length ? `<ul class="route b">${jobRows(j.n, j)}</ul>` : `<p class="empty">O*NET doesn't list related jobs for this one.</p>`}</div>
 
-      <div class="section-title"><h2>Train for it nearby</h2><span class="small muted">Programs at Las Positas College in Livermore</span></div>
+      ${sectionTitle("T", "var(--g)", "Transfer here: train nearby", "Programs at Las Positas College in Livermore")}
       ${progs.length ? `<div class="grid-3">${progs.slice(0, 9).map(([i, p]) => `
-        <div class="card prog">
-          <span class="tag">${p.cost === "tuition-free" ? "Tuition-free" : p.cost.startsWith("apprenticeship") ? "Paid apprenticeship" : "Community college"}</span>
+        <div class="prog">
+          <span class="tag ${p.cost === "tuition-free" ? "free" : ""}">${p.cost === "tuition-free" ? "Tuition-free" : p.cost.startsWith("apprenticeship") ? "Paid apprenticeship" : "Community college"}</span>
           <div class="pn">${esc(p.name)}</div>
           <div class="small muted">${esc(p.type)} · ${esc(p.where)}</div>
           <div class="for">Leads toward: ${[...progFor[i]].slice(0, 3).map(esc).join("; ")}</div>
         </div>`).join("")}</div>`
       : `<div class="card"><p class="empty">We haven't matched a local program to these jobs yet. The Tri-Valley Career Center (below) can point you to short-term training and scholarships.</p></div>`}
 
-      <div class="section-title"><h2>Free help in the Tri-Valley</h2></div>
+      ${sectionTitle("i", "#fff;border:3px solid var(--rule)", "Free help in the Tri-Valley", "")}
       <div class="grid-2">${D.help.map(h => `
         <div class="card help">
           <h3>${esc(h.name)}</h3>
           <p>${esc(h.what)}</p>
           <p class="small muted">${esc(h.where)}${h.phone ? " · " + esc(h.phone) : ""}</p>
-          <a href="${h.url}" target="_blank" rel="noopener">Learn more</a>
+          <a class="go" href="${h.url}" target="_blank" rel="noopener">Learn more</a>
         </div>`).join("")}</div>
 
       <div class="card note">
@@ -190,6 +195,17 @@
     $$("[data-go]", $("#result")).forEach(b => b.addEventListener("click", () => { $("#q").value = JOBS[b.dataset.go].t; location.hash = "#/job/" + b.dataset.go; }));
     $("#result").scrollIntoView({ behavior: "smooth", block: "start" });
     document.title = j.t + " · Next Step Tri-Valley";
+  }
+
+  // ---------- rotating local photos on the home page ----------
+  function initPhotos() {
+    const band = $("#home-band"); if (!band) return;
+    const phs = $$(".ph", band), credit = $("#home-credit");
+    let i = 0;
+    const show = () => { phs.forEach((p, n) => p.classList.toggle("on", n === i)); credit.innerHTML = phs[i].dataset.credit; };
+    show();
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setInterval(() => { i = (i + 1) % phs.length; show(); }, 7000);
   }
 
   // ---------- unemployment estimate ----------
@@ -247,9 +263,9 @@
     const groups = s.by_major.filter(g => g.emp >= 15000).map(g => ({ ...g, share: g.high / g.emp })).sort((a, b) => b.share - a.share);
     $("#city").innerHTML = `
       <div class="kpis">
-        <div class="card kpi"><div class="v">${s.high_share}%</div><div class="k">of the metro's ${k(s.total_emp)} jobs are in occupations with high AI exposure (top third of all jobs)</div></div>
-        <div class="card kpi"><div class="v">${s.office_high_share}%</div><div class="k">of office and administrative support jobs are high exposure. That's ${k(s.office_high_emp)} workers.</div></div>
-        <div class="card kpi"><div class="v">${k(s.squeezed_emp)}</div><div class="k">workers are in jobs that are both highly exposed and pay less than the metro's typical wage of ${money(s.all_median)}</div></div>
+        <div class="kpi"><div class="v">${s.high_share}%</div><div class="k">of the metro's ${k(s.total_emp)} jobs are in occupations with high AI exposure (top third of all jobs)</div></div>
+        <div class="kpi"><div class="v">${s.office_high_share}%</div><div class="k">of office and administrative support jobs are high exposure. That's ${k(s.office_high_emp)} workers.</div></div>
+        <div class="kpi"><div class="v">${k(s.squeezed_emp)}</div><div class="k">workers are in jobs that are both highly exposed and pay less than the metro's typical wage of ${money(s.all_median)}</div></div>
       </div>
 
       <div class="card">
@@ -336,7 +352,7 @@
   // ---------- boot ----------
   fetch("data.json").then(r => r.json()).then(d => {
     D = d; d.jobs.forEach(j => (JOBS[j.s] = j)); buildIndex();
-    initSearch(); initCalc();
+    initSearch(); initCalc(); initPhotos();
     window.addEventListener("hashchange", route);
     route();
   }).catch(() => { $("#result").innerHTML = `<div class="card"><p>Sorry, the data didn't load. Please refresh the page.</p></div>`; });

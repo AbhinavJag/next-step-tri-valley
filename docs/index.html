@@ -7,125 +7,156 @@
 <meta name="description" content="A free tool for workers in Dublin, Pleasanton and Livermore. Look up your job's AI exposure, find nearby jobs that use your skills, local training, and your unemployment estimate.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312284a'/%3E%3Ccircle cx='22' cy='11' r='3.5' fill='%23f2b632'/%3E%3Cpath d='M0 26 Q8 14 16 21 T32 18 V32 H0Z' fill='%23f2b632'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=5">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23ffd100'/%3E%3Crect x='13' y='4' width='6' height='24' fill='%23111'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23fff' stroke='%23111' stroke-width='4'/%3E%3C/svg%3E">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="top">
   <div class="wrap top-in">
-    <a class="brand" href="#/">
-      <svg class="brand-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="currentColor"/><circle cx="22" cy="11" r="3.5" fill="#f2b632"/><path d="M0 26 Q8 14 16 21 T32 18 V32 H0Z" fill="#f2b632"/></svg>
-      <span>Next Step <b>Tri-Valley</b></span>
+    <a class="brand" href="#/" aria-label="Next Step Tri-Valley, home">
+      <span class="badge" aria-hidden="true">NS</span>
+      <span class="name">Next Step <span>Tri-Valley</span></span>
     </a>
     <nav class="nav" aria-label="Main">
       <a href="#/" data-nav="job">Check your job</a>
-      <a href="#/benefits" data-nav="benefits">Unemployment estimate</a>
+      <a href="#/benefits" data-nav="benefits">Unemployment</a>
       <a href="#/city" data-nav="city">For the city</a>
       <a href="#/about" data-nav="about">About the data</a>
     </nav>
   </div>
 </header>
 
-<main id="main" class="wrap">
+<main id="main">
   <!-- JOB VIEW -->
   <section id="view-job" class="view">
-    <div class="hero-panel">
-    <div class="hero">
-        <p class="eyebrow">For workers in Dublin, Pleasanton and Livermore</p>
-        <h1>Your job is changing.<br><em>Here's what's close by.</em></h1>
-        <p class="lede">Type your job. You'll see how much of it overlaps with what AI can do, what it pays here, the jobs that use the skills you already have, and where to train for them nearby. It's free and nothing you type leaves your browser.</p>
-        <div class="search" role="combobox" aria-expanded="false" aria-owns="suggest" aria-haspopup="listbox">
-          <label for="q" class="sr">Your job title</label>
-          <svg class="search-ic" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input id="q" type="search" autocomplete="off" placeholder="Try &quot;receptionist&quot;, &quot;bookkeeper&quot; or &quot;customer service&quot;" aria-autocomplete="list" aria-controls="suggest">
-          <ul id="suggest" role="listbox" hidden></ul>
+    <div class="photo-band" id="home-band">
+      <div class="ph" style="background-image:url('https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c5/Mt._Diablo.jpg/1920px-Mt._Diablo.jpg')" data-credit='Mt. Diablo over the Tri-Valley. Photo: Lottaresearch, <a href="https://commons.wikimedia.org/wiki/File:Mt._Diablo.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a>'></div>
+      <div class="ph" style="background-image:url('https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Pleasanton_downtown.jpg/1920px-Pleasanton_downtown.jpg')" data-credit='Main Street, Pleasanton. Photo: SelfieCity, <a href="https://commons.wikimedia.org/wiki/File:Pleasanton_downtown.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a>'></div>
+      <div class="ph" style="background-image:url('https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Vineyard_in_the_Livermore_Valley.jpg/1920px-Vineyard_in_the_Livermore_Valley.jpg')" data-credit='Livermore Valley vineyard. Photo: Agne27, <a href="https://commons.wikimedia.org/wiki/File:Vineyard_in_the_Livermore_Valley.jpg" target="_blank" rel="noopener">CC BY-SA 3.0</a>'></div>
+      <div class="ph" style="background-image:url('https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Downtown_Livermore_California.jpg/1920px-Downtown_Livermore_California.jpg')" data-credit='Downtown Livermore. Photo: LPS.1, <a href="https://commons.wikimedia.org/wiki/File:Downtown_Livermore_California.jpg" target="_blank" rel="noopener">CC0</a>'></div>
+      <div class="wrap">
+        <div class="hero">
+          <p class="eyebrow">Dublin · Pleasanton · Livermore</p>
+          <h1>Your job is changing.<br><span class="hl">Find your next stop.</span></h1>
+          <p class="lede">Type your job. See how much of it AI can already do, what it pays here, which nearby jobs use the skills you have, and where to train for them. Free, and nothing you type leaves your browser.</p>
+          <div class="search" role="combobox" aria-expanded="false" aria-owns="suggest" aria-haspopup="listbox">
+            <label for="q" class="sr">Your job title</label>
+            <svg class="search-ic" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="3"/><path d="M15.5 15.5L21 21" stroke="currentColor" stroke-width="3"/></svg>
+            <input id="q" type="search" autocomplete="off" placeholder="Your job, like &quot;receptionist&quot; or &quot;bookkeeper&quot;" aria-autocomplete="list" aria-controls="suggest">
+            <ul id="suggest" role="listbox" hidden></ul>
+          </div>
+          <p class="try">Popular here:
+            <button class="chip-btn" data-soc="43-9061">Office clerk</button>
+            <button class="chip-btn" data-soc="43-4051">Customer service</button>
+            <button class="chip-btn" data-soc="43-3031">Bookkeeping</button>
+            <button class="chip-btn" data-soc="43-6013">Medical secretary</button>
+            <button class="chip-btn" data-soc="41-2031">Retail sales</button>
+          </p>
+          <svg class="lineart" viewBox="0 0 760 64" aria-hidden="true">
+            <rect x="20" y="20" width="720" height="10" fill="var(--y)"/>
+            <g fill="var(--node)" stroke="var(--ink)" stroke-width="6">
+              <circle cx="40" cy="25" r="11"/><circle cx="380" cy="25" r="11"/><circle cx="720" cy="25" r="11"/>
+            </g>
+            <text class="lbl" x="40" y="58" text-anchor="start">Dublin</text>
+            <text class="lbl" x="380" y="58" text-anchor="middle">Pleasanton</text>
+            <text class="lbl" x="720" y="58" text-anchor="end">Livermore</text>
+          </svg>
         </div>
-        <p class="try">Common in the Tri-Valley:
-          <button class="chip-btn" data-soc="43-9061">Office clerk</button>
-          <button class="chip-btn" data-soc="43-4051">Customer service</button>
-          <button class="chip-btn" data-soc="43-3031">Bookkeeping</button>
-          <button class="chip-btn" data-soc="43-6013">Medical secretary</button>
-          <button class="chip-btn" data-soc="41-2031">Retail sales</button>
-        </p>
       </div>
-      <svg class="hills" viewBox="0 0 1200 130" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M0 70 C150 20 260 30 380 62 S640 110 780 58 S1040 10 1200 48 V130 H0Z" fill="#2c5490"/>
-        <path d="M0 96 C120 60 240 64 360 88 S600 128 760 92 S1020 52 1200 82 V130 H0Z" fill="#e9ad2c"/>
-        <path d="M0 118 C200 96 340 100 520 114 S860 132 1200 106 V130 H0Z" fill="#c98a0b"/>
-      </svg>
+      <div class="photo-credit" id="home-credit"></div>
     </div>
-    <div id="result" aria-live="polite"></div>
+    <div class="wrap"><div id="result" aria-live="polite"></div></div>
   </section>
 
   <!-- BENEFITS VIEW -->
   <section id="view-benefits" class="view" hidden>
-    <div class="page-head">
-      <p class="eyebrow">California unemployment insurance</p>
-      <h1>How much would unemployment pay me?</h1>
-      <p class="lede">California pays based on your best three-month stretch of pay in the past year and a half. This gives you a quick estimate using EDD's own benefit table. EDD makes the final call.</p>
+    <div class="photo-band">
+      <div class="ph on" style="background-image:url('https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Downtown_Livermore_California.jpg/1920px-Downtown_Livermore_California.jpg')"></div>
+      <div class="wrap">
+        <div class="page-head">
+          <p class="eyebrow">California unemployment insurance</p>
+          <h1>What would unemployment pay me?</h1>
+          <p class="lede">California pays based on your best three months of pay in the past year and a half. This estimate uses EDD's own benefit table. EDD makes the final call.</p>
+        </div>
+      </div>
+      <div class="photo-credit">Downtown Livermore. Photo: LPS.1, <a href="https://commons.wikimedia.org/wiki/File:Downtown_Livermore_California.jpg" target="_blank" rel="noopener">CC0</a></div>
     </div>
-    <div class="grid-2">
-      <form class="card calc" id="calc" novalidate>
-        <fieldset>
-          <legend>How do you get paid?</legend>
-          <div class="seg" role="radiogroup">
-            <label><input type="radio" name="mode" value="hour" checked> By the hour</label>
-            <label><input type="radio" name="mode" value="year"> Yearly salary</label>
-            <label><input type="radio" name="mode" value="quarter"> I know my best quarter</label>
+    <div class="wrap" style="margin-top:28px">
+      <div class="grid-2">
+        <form class="card calc" id="calc" novalidate>
+          <fieldset>
+            <legend>How do you get paid?</legend>
+            <div class="seg" role="radiogroup">
+              <label><input type="radio" name="mode" value="hour" checked> By the hour</label>
+              <label><input type="radio" name="mode" value="year"> Yearly salary</label>
+              <label><input type="radio" name="mode" value="quarter"> I know my best quarter</label>
+            </div>
+          </fieldset>
+          <div class="field" data-mode="hour">
+            <label for="rate">Hourly pay</label>
+            <div class="money"><span>$</span><input id="rate" inputmode="decimal" value="25"></div>
+            <label for="hours">Hours a week</label>
+            <input id="hours" inputmode="decimal" value="40">
           </div>
-        </fieldset>
-        <div class="field" data-mode="hour">
-          <label for="rate">Hourly pay</label>
-          <div class="money"><span>$</span><input id="rate" inputmode="decimal" value="25"></div>
-          <label for="hours">Hours a week</label>
-          <input id="hours" inputmode="decimal" value="40">
-        </div>
-        <div class="field" data-mode="year" hidden>
-          <label for="salary">Yearly pay before taxes</label>
-          <div class="money"><span>$</span><input id="salary" inputmode="decimal" value="55000"></div>
-        </div>
-        <div class="field" data-mode="quarter" hidden>
-          <label for="hq">Pay in your highest three months (one calendar quarter)</label>
-          <div class="money"><span>$</span><input id="hq" inputmode="decimal" value="13000"></div>
-        </div>
-        <p class="fine">Assumes you worked steadily all year. If your hours changed, use "I know my best quarter."</p>
-      </form>
-      <div class="card calc-out" id="calc-out" aria-live="polite"></div>
-    </div>
-    <div class="card note">
-      <h2>Want to train instead of just searching?</h2>
-      <p>Under <a href="https://edd.ca.gov/en/unemployment/california_training_benefits/" target="_blank" rel="noopener">California Training Benefits</a>, you can keep getting unemployment while you're in approved training, and you don't have to look for work while you're enrolled. You have to ask EDD <b>before your 16th week</b> of benefits to qualify for extra weeks. EDD doesn't pay tuition, so pair it with a fee waiver or a training scholarship from the Tri-Valley Career Center.</p>
+          <div class="field" data-mode="year" hidden>
+            <label for="salary">Yearly pay before taxes</label>
+            <div class="money"><span>$</span><input id="salary" inputmode="decimal" value="55000"></div>
+          </div>
+          <div class="field" data-mode="quarter" hidden>
+            <label for="hq">Pay in your highest three months (one calendar quarter)</label>
+            <div class="money"><span>$</span><input id="hq" inputmode="decimal" value="13000"></div>
+          </div>
+          <p class="fine">Assumes you worked steadily all year. If your hours changed, use "I know my best quarter."</p>
+        </form>
+        <div class="card calc-out" id="calc-out" aria-live="polite"></div>
+      </div>
+      <div class="card note">
+        <h2>Train instead of just searching</h2>
+        <p>Under <a href="https://edd.ca.gov/en/unemployment/california_training_benefits/" target="_blank" rel="noopener">California Training Benefits</a>, you can keep getting unemployment while you're in approved training, and you don't have to look for work while you're enrolled. Ask EDD <b>before your 16th week</b> of benefits to qualify for extra weeks. EDD doesn't pay tuition, so pair it with a fee waiver or a training scholarship from the Tri-Valley Career Center.</p>
+      </div>
     </div>
   </section>
 
   <!-- CITY VIEW -->
   <section id="view-city" class="view" hidden>
-    <div class="page-head">
-      <p class="eyebrow">For city council, staff and employers</p>
-      <h1>Who in our region is most exposed, and what would help</h1>
-      <p class="lede" id="city-lede"></p>
+    <div class="photo-band">
+      <div class="ph on" style="background-image:url('https://thumb.wikimedia.org/wikipedia/commons/thumb/d/de/Pleasanton_downtown.jpg/1920px-Pleasanton_downtown.jpg')"></div>
+      <div class="wrap">
+        <div class="page-head">
+          <p class="eyebrow">For city council, staff and employers</p>
+          <h1>Who's most exposed, and what would help</h1>
+          <p class="lede" id="city-lede"></p>
+        </div>
+      </div>
+      <div class="photo-credit">Main Street, Pleasanton. Photo: SelfieCity, <a href="https://commons.wikimedia.org/wiki/File:Pleasanton_downtown.jpg" target="_blank" rel="noopener">CC BY-SA 4.0</a></div>
     </div>
-    <div id="city"></div>
+    <div class="wrap" style="margin-top:28px"><div id="city"></div></div>
   </section>
 
   <!-- ABOUT VIEW -->
   <section id="view-about" class="view" hidden>
-    <div class="page-head">
-      <p class="eyebrow">How this works</p>
-      <h1>About the data</h1>
+    <div class="photo-band">
+      <div class="ph on" style="background-image:url('https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dc/Vineyard_in_the_Livermore_Valley.jpg/1920px-Vineyard_in_the_Livermore_Valley.jpg')"></div>
+      <div class="wrap">
+        <div class="page-head">
+          <p class="eyebrow">How this works</p>
+          <h1>About the data</h1>
+        </div>
+      </div>
+      <div class="photo-credit">Livermore Valley vineyard. Photo: Agne27, <a href="https://commons.wikimedia.org/wiki/File:Vineyard_in_the_Livermore_Valley.jpg" target="_blank" rel="noopener">CC BY-SA 3.0</a></div>
     </div>
-    <div class="prose" id="about"></div>
+    <div class="wrap" style="margin-top:28px"><div class="prose" id="about"></div></div>
   </section>
 </main>
 
 <footer class="foot">
   <div class="wrap foot-in">
-    <p>Built by Abhinav Jagtap, Dublin High School, for Neighborhood Hacks 2026. Data from the U.S. Bureau of Labor Statistics, O*NET, and Felten, Raj and Seamans. Estimates only, not legal or financial advice.</p>
+    <p>Built by Abhinav Jagtap, Dublin High School, for Neighborhood Hacks 2026. Data from the U.S. Bureau of Labor Statistics, O*NET, and Felten, Raj and Seamans. Photos from Wikimedia Commons, credited on each page. Estimates only, not legal or financial advice.</p>
     <p><a href="https://github.com/AbhinavJag/next-step-tri-valley" target="_blank" rel="noopener">Source code and data</a></p>
   </div>
 </footer>
-<script src="app.js?v=3"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
