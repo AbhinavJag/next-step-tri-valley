@@ -234,7 +234,7 @@ details summary { cursor: pointer; color: var(--brand); font-weight: 500; font-s
 .top { border-bottom-color: var(--line); }
 .brand-mark { color: var(--hero-2); }
 .nav a[aria-current="page"] { background: var(--hero-2); color: #fff; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .nav a[aria-current="page"] { background: var(--gold); color: #0b1322; } :root:not([data-theme="light"]) .brand-mark { color: var(--gold); } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .nav a[aria-current="page"] { background: var(--gold); color: #0b1322; } :root:not([data-theme="light"]) .brand-mark { color: #2c5490; } :root:not([data-theme="light"]) .hero-panel { border: 1px solid var(--line); } }
 .page-head h1 { position: relative; }
 .page-head h1::after { content: ""; display: block; width: 64px; height: 5px; border-radius: 3px; background: var(--gold); margin-top: 14px; }
 .prog .tag { color: var(--brand); background: var(--brand-soft); }
