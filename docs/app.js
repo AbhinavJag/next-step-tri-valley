@@ -59,8 +59,8 @@
   // ---------- routing ----------
   function route() {
     const h = location.hash.replace(/^#\/?/, "");
-    const [view, arg] = h.split("/");
-    const v = ["benefits", "city", "about"].includes(view) ? view : "job";
+    const [view, arg, arg2] = h.split("/");
+    const v = ["benefits", "city", "about", "plan"].includes(view) ? view : "job";
     $$(".view").forEach(s => (s.hidden = s.id !== "view-" + v));
     $$("[data-nav]").forEach(a => a.dataset.nav === v ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
     if (v !== "job" || !arg) document.title = "Next Step Tri-Valley";
@@ -69,6 +69,7 @@
     }
     if (v === "benefits") calc();
     if (v === "city") renderCity();
+    if (v === "plan") renderPlan(JOBS[arg] ? arg : null, JOBS[arg2] ? arg2 : null);
     if (v === "about") renderAbout();
     if (!(v === "job" && arg)) window.scrollTo({ top: 0 });
   }
@@ -117,7 +118,7 @@
   function jobRows(socs, base) {
     return socs.map(s => JOBS[s]).map(j => `
       <li>
-        <div><button class="jt" data-go="${j.s}">${esc(j.t)}</button><div class="meta">${k(j.e || 0)} jobs in the metro area</div></div>
+        <div><button class="jt" data-go="${j.s}">${esc(j.t)}</button><div class="meta">${k(j.e || 0)} jobs in the metro area · <a class="plan-link" href="#/plan/${base.s}/${j.s}">Plan this switch</a></div></div>
         <span class="band ${j.b}" title="More exposed to AI than ${j.x}% of jobs">${bandWord(j.b)} AI · ${j.x}</span>
         <div class="pay">${money(j.m)}${payDelta(base.m, j.m)}</div>
       </li>`).join("");
@@ -157,6 +158,7 @@
           <p class="callout">${BAND_TEXT[j.b]}</p>
           ${zone ? `<p class="small muted" style="margin:0">How people usually get this job: ${esc(zone)}.</p>` : ""}
           <p class="small muted" style="margin:6px 0 0">Pay and job counts are for the San Francisco-Oakland-Fremont metro area, which includes the Tri-Valley (BLS, May 2025).</p>
+          <a class="go cta" href="#/plan/${j.s}/${j.mv[0] || j.n[0] || j.s}">Plan a switch from this job</a>
         </div>
       </article>
 
@@ -206,6 +208,217 @@
     show();
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     setInterval(() => { i = (i + 1) % phs.length; show(); }, 7000);
+  }
+
+  // ---------- switch planner ----------
+  const PROG_DEFAULTS = {
+    "community college": { months: 9, cost: 1600, note: "About 24 units at $46 a unit plus books" },
+    "tuition-free": { months: 4, cost: 100, note: "Tuition-free, maybe a materials fee" },
+    "apprenticeship (paid while you learn)": { months: 12, cost: 0, note: "Paid while you learn" },
+    none: { months: 6, cost: 1500, note: "Short course or certification" },
+  };
+  let P = null;
+
+  function renderPlan(from, to) {
+    from = from || P?.from || "43-6013";
+    const fj = JOBS[from];
+    to = to || (P && P.from === from ? P.to : null) || fj.mv[0] || fj.n[0] || from;
+    const keep = P && P.from === from;
+    P = {
+      from, to,
+      pay: keep ? P.pay : fj.m,
+      start: (P && P.to === to && keep) ? P.start : JOBS[to].m,
+      prog: (P && P.to === to && keep) ? P.prog : (JOBS[to].tr[0] ?? -1),
+      months: null, cost: null,
+      waiver: keep ? P.waiver : false, voucher: keep ? P.voucher : false,
+      laidoff: keep ? P.laidoff : true, search: keep ? P.search : 4,
+    };
+    const d = progDefaults(P.prog); P.months = d.months; P.cost = d.cost;
+    if (location.hash !== `#/plan/${from}/${to}`) history.replaceState(null, "", `#/plan/${from}/${to}`);
+    drawPlanForm(); planCalc();
+  }
+
+  function progDefaults(i) { return i >= 0 ? PROG_DEFAULTS[D.programs[i].cost] || PROG_DEFAULTS.none : PROG_DEFAULTS.none; }
+
+  function jobOptions(sel, groups) {
+    return groups.filter(g => g[1].length).map(([label, socs]) => `<optgroup label="${esc(label)}">${socs.map(s => `<option value="${s}" ${s === sel ? "selected" : ""}>${esc(JOBS[s].t)}</option>`).join("")}</optgroup>`).join("");
+  }
+
+  function drawPlanForm() {
+    const fj = JOBS[P.from], tj = JOBS[P.to];
+    const all = D.jobs.map(j => j.s).sort((a, b) => JOBS[a].t.localeCompare(JOBS[b].t));
+    const progIdx = [...new Set([...tj.tr, ...fj.tr])];
+    $("#plan").innerHTML = `
+      <div class="planner">
+        <form class="plan-form" id="plan-form" onsubmit="return false">
+          <ol class="steps">
+            <li class="stop">
+              <h3>Where you are</h3>
+              <label for="p-from">Your job now</label>
+              <select id="p-from">${jobOptions(P.from, [["All jobs", all]])}</select>
+              <label for="p-pay">What you make a year</label>
+              <div class="money"><span>$</span><input id="p-pay" inputmode="numeric" value="${P.pay}"></div>
+              <p class="hint">Typical here: ${money(fj.m)}. Hourly? Multiply by 2,080 for full time.</p>
+            </li>
+            <li class="stop">
+              <h3>Where you want to go</h3>
+              <label for="p-to">Next job</label>
+              <select id="p-to">${jobOptions(P.to, [["Next stops (less AI exposure)", fj.mv], ["Same line (similar skills)", fj.n], ["All jobs", all]])}</select>
+              <label for="p-start">Starting pay you expect</label>
+              <div class="money"><span>$</span><input id="p-start" inputmode="numeric" value="${P.start}"></div>
+              <div class="quick">
+                <button type="button" data-start="${tj.p25}">New hire ${money(tj.p25)}</button>
+                <button type="button" data-start="${tj.m}">Typical ${money(tj.m)}</button>
+                <button type="button" data-start="${tj.p75}">Experienced ${money(tj.p75)}</button>
+              </div>
+            </li>
+            <li class="stop">
+              <h3>How you get there</h3>
+              <label for="p-prog">Training</label>
+              <select id="p-prog">
+                ${progIdx.map(i => `<option value="${i}" ${i === P.prog ? "selected" : ""}>${esc(D.programs[i].name)} (Las Positas)</option>`).join("")}
+                <option value="-1" ${P.prog === -1 ? "selected" : ""}>Other training or certification</option>
+              </select>
+              <p class="hint" id="p-prog-note"></p>
+              <label for="p-months">How long it takes: <b id="p-months-v">${P.months} months</b></label>
+              <input id="p-months" type="range" min="1" max="24" value="${P.months}">
+              <label for="p-cost">Tuition, fees and books</label>
+              <div class="money"><span>$</span><input id="p-cost" inputmode="numeric" value="${P.cost}"></div>
+              <label class="check"><input type="checkbox" id="p-waiver" ${P.waiver ? "checked" : ""}> I qualify for the College Promise Grant (waives enrollment fees)</label>
+              <label class="check"><input type="checkbox" id="p-voucher" ${P.voucher ? "checked" : ""}> Include the proposed $800 Dublin reskilling voucher</label>
+            </li>
+            <li class="stop">
+              <h3>Your situation</h3>
+              <div class="seg">
+                <label><input type="radio" name="p-sit" value="1" ${P.laidoff ? "checked" : ""}> I was laid off</label>
+                <label><input type="radio" name="p-sit" value="0" ${P.laidoff ? "" : "checked"}> I still have my job</label>
+              </div>
+              <div id="p-search-wrap" ${P.laidoff ? "" : "hidden"}>
+                <label for="p-search">If you don't retrain, months to find the same kind of job: <b id="p-search-v">${P.search}</b></label>
+                <input id="p-search" type="range" min="0" max="12" value="${P.search}">
+              </div>
+              <p class="hint" id="p-sit-note"></p>
+            </li>
+          </ol>
+        </form>
+        <div class="plan-out" id="plan-out" aria-live="polite"></div>
+      </div>`;
+
+    const num = id => Math.max(0, parseFloat(($("#" + id).value || "0").replace(/[$,]/g, "")) || 0);
+    $("#p-from").addEventListener("change", e => { P = null; renderPlan(e.target.value, null); });
+    $("#p-to").addEventListener("change", e => { const f = P.from; const keepPay = P.pay, lo = P.laidoff, se = P.search, w = P.waiver, v = P.voucher; P = { from: f, pay: keepPay, laidoff: lo, search: se, waiver: w, voucher: v }; renderPlan(f, e.target.value); });
+    $("#p-prog").addEventListener("change", e => { P.prog = +e.target.value; const d = progDefaults(P.prog); P.months = d.months; P.cost = d.cost; $("#p-months").value = d.months; $("#p-cost").value = d.cost; planCalc(); });
+    $$(".quick button").forEach(b => b.addEventListener("click", () => { $("#p-start").value = b.dataset.start; planCalc(); }));
+    $("#plan-form").addEventListener("input", e => {
+      if (["p-from", "p-to", "p-prog"].includes(e.target.id)) return;
+      P.pay = num("p-pay"); P.start = num("p-start"); P.months = +$("#p-months").value; P.cost = num("p-cost");
+      P.waiver = $("#p-waiver").checked; P.voucher = $("#p-voucher").checked;
+      P.laidoff = $("input[name=p-sit]:checked").value === "1"; P.search = +$("#p-search").value;
+      planCalc();
+    });
+  }
+
+  function planCalc() {
+    const fj = JOBS[P.from], tj = JOBS[P.to];
+    const prog = P.prog >= 0 ? D.programs[P.prog] : null;
+    $("#p-prog-note").textContent = prog ? `${prog.type}. ${progDefaults(P.prog).note}. Check exact costs with Las Positas.` : "Set the length and cost yourself.";
+    $("#p-months-v").textContent = P.months + (P.months === 1 ? " month" : " months");
+    $("#p-search-v").textContent = P.search + (P.search === 1 ? " month" : " months");
+    $("#p-search-wrap").hidden = !P.laidoff;
+
+    // Costs: the fee waiver removes the enrollment-fee part of a community college program; the voucher covers up to $800.
+    let cost = P.cost;
+    if (P.waiver && prog && prog.cost === "community college") cost = Math.max(0, cost - 24 * 46);
+    const voucher = P.voucher ? Math.min(800, cost) : 0;
+    const oop = cost - voucher;
+
+    const wba = weeklyBenefit(P.pay / 4);
+    const uiMonthly = wba * 52 / 12;
+    const uiMonths = 6; // 26 weeks
+    $("#p-sit-note").innerHTML = P.laidoff
+      ? `Unemployment estimate: <b>${money(wba)}/week</b> for up to 26 weeks. With California Training Benefits you keep it while you train (ask EDD before week 16).`
+      : "You'd keep working and train on nights or weekends, so the training may take longer.";
+
+    const N = 60, A = [], B = [];
+    let a = 0, b = -oop;
+    for (let m = 0; m < N; m++) {
+      if (P.laidoff) {
+        a += m < P.search ? (m < uiMonths ? uiMonthly : 0) : P.pay / 12;
+        b += m < P.months ? (m < uiMonths ? uiMonthly : 0) : P.start / 12;
+      } else {
+        a += P.pay / 12;
+        b += m < P.months ? P.pay / 12 : P.start / 12;
+      }
+      A.push(a); B.push(b);
+    }
+    // Pay-back month: the first month (after training) from which the switch path stays ahead for good.
+    let even = -1;
+    for (let m = Math.max(0, P.months - 1); m < N; m++) {
+      if (B.slice(m).every((v, i) => v > A[m + i])) { even = m + 1; break; }
+    }
+    const diff5 = B[N - 1] - A[N - 1];
+    const trainIncome = P.laidoff ? (uiMonths >= P.months ? uiMonthly : uiMonthly * uiMonths / P.months) : P.pay / 12;
+    const raise = P.start - P.pay;
+
+    $("#plan-out").innerHTML = `
+      <div class="kpis plan-kpis">
+        <div class="kpi"><div class="v">${money(oop)}</div><div class="k">out of pocket for training${voucher ? `, after the ${money(voucher)} voucher` : ""}</div></div>
+        <div class="kpi"><div class="v">${money(trainIncome)}</div><div class="k">a month to live on while training${P.laidoff ? ` (unemployment${P.months > uiMonths ? ", averaged, it stops after 26 weeks" : ""})` : " (your paycheck)"}, vs ${money(P.pay / 12)} before</div></div>
+        <div class="kpi"><div class="v">${raise >= 0 ? "+" : "−"}${money(Math.abs(raise))}</div><div class="k">a year in the new job vs. your pay now</div></div>
+      </div>
+      <div class="verdict ${even > 0 ? "good" : "bad"}">
+        <div class="cond">${even > 0 ? `Pays you back in month ${even}` : "Doesn't pay back within 5 years"}</div>
+        <p>After 5 years, switching leaves you <b>${money(Math.abs(diff5))} ${diff5 >= 0 ? "ahead" : "behind"}</b> compared with ${P.laidoff ? "going back to the same kind of work" : "staying where you are"}. ${tj.x < fj.x ? `You'd also move from AI exposure <b>${fj.x}</b> to <b>${tj.x}</b>.` : tj.x > fj.x ? `Heads up: the new job is <b>more</b> exposed to AI (${tj.x} vs ${fj.x}).` : ""}</p>
+      </div>
+      <div class="card chart-card">
+        <h3>Total money earned, minus training costs</h3>
+        <div class="legend"><span class="sw" style="background:var(--b)"></span> Train and switch to ${esc(tj.t)} <span class="sw" style="background:var(--ink-3)"></span> ${P.laidoff ? "Go back to the same kind of job" : "Stay in your job"}</div>
+        ${planChart(A, B)}
+        <p class="hint">Before taxes. Doesn't count raises, or the chance that ${esc(fj.t.toLowerCase())} jobs get harder to find as AI spreads. Estimates only.</p>
+      </div>`;
+    initPlanChart(A, B);
+  }
+
+  function planChart(A, B) {
+    return `<div class="pchart" id="pchart"><svg viewBox="0 0 640 260" role="img" aria-label="Cumulative earnings over 5 years for both paths"></svg><div class="tip" hidden></div></div>`;
+  }
+
+  function initPlanChart(A, B) {
+    const wrap = $("#pchart"), svg = $("svg", wrap), tip = $(".tip", wrap);
+    const W = 640, H = 260, L = 64, R = 150, T = 14, Bm = 30;
+    const lo = Math.min(0, ...A, ...B), hi = Math.max(...A, ...B) * 1.05;
+    const x = m => L + (m / 59) * (W - L - R), y = v => T + (1 - (v - lo) / (hi - lo)) * (H - T - Bm);
+    const path = arr => arr.map((v, m) => (m ? "L" : "M") + x(m).toFixed(1) + "," + y(v).toFixed(1)).join("");
+    const ticks = []; const step = hi > 400000 ? 100000 : 50000;
+    for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) ticks.push(v);
+    const fmt = v => (v < 0 ? "−" : "") + "$" + Math.round(Math.abs(v) / 1000) + "K";
+    svg.innerHTML = `
+      ${ticks.map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--soft-rule)" stroke-width="1"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end" class="ax">${fmt(v)}</text>`).join("")}
+      ${[0, 12, 24, 36, 48, 59].map(m => `<text x="${x(m)}" y="${H - 8}" text-anchor="middle" class="ax">${m === 0 ? "Now" : m === 59 ? "Year 5" : "Year " + m / 12}</text>`).join("")}
+      <rect x="${x(0)}" y="${T}" width="${Math.max(0, x(Math.min(P.months, 59)) - x(0))}" height="${H - T - Bm}" fill="var(--y)" opacity=".18"/>
+      <text x="${x(0) + 6}" y="${T + 14}" class="ax">Training</text>
+      <path d="${path(A)}" fill="none" stroke="var(--ink-3)" stroke-width="2.5"/>
+      <path d="${path(B)}" fill="none" stroke="var(--b)" stroke-width="3"/>
+      <text x="${W - R + 8}" y="${y(B[59]) + 4}" class="lab" fill="var(--b)">Switch ${fmt(B[59])}</text>
+      <text x="${W - R + 8}" y="${y(A[59]) + (Math.abs(y(A[59]) - y(B[59])) < 16 ? (A[59] > B[59] ? -10 : 18) : 4)}" class="lab" fill="var(--ink-2)">${P.laidoff ? "Same job" : "Stay"} ${fmt(A[59])}</text>
+      <line class="cross" x1="0" x2="0" y1="${T}" y2="${H - Bm}" stroke="var(--ink)" stroke-width="1" visibility="hidden"/>
+      <circle class="dA" r="5" fill="var(--ink-3)" stroke="var(--bg)" stroke-width="2" visibility="hidden"/>
+      <circle class="dB" r="5" fill="var(--b)" stroke="var(--bg)" stroke-width="2" visibility="hidden"/>
+      <rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - Bm}" fill="transparent" class="hit"/>`;
+    const hit = $(".hit", svg), cross = $(".cross", svg), dA = $(".dA", svg), dB = $(".dB", svg);
+    const move = e => {
+      const r = svg.getBoundingClientRect(); const px = (e.clientX - r.left) * (W / r.width);
+      const m = Math.max(0, Math.min(59, Math.round((px - L) / (W - L - R) * 59)));
+      cross.setAttribute("x1", x(m)); cross.setAttribute("x2", x(m)); cross.setAttribute("visibility", "visible");
+      dA.setAttribute("cx", x(m)); dA.setAttribute("cy", y(A[m])); dB.setAttribute("cx", x(m)); dB.setAttribute("cy", y(B[m]));
+      dA.setAttribute("visibility", "visible"); dB.setAttribute("visibility", "visible");
+      tip.hidden = false;
+      tip.innerHTML = `<b>Month ${m + 1}</b><br>Switch: ${money(B[m])}<br>${P.laidoff ? "Same job" : "Stay"}: ${money(A[m])}`;
+      const left = (x(m) / W) * r.width; tip.style.left = Math.min(left + 12, r.width - 170) + "px"; tip.style.top = "10px";
+    };
+    hit.addEventListener("mousemove", move);
+    hit.addEventListener("touchmove", e => { move(e.touches[0]); e.preventDefault(); }, { passive: false });
+    hit.addEventListener("mouseleave", () => { tip.hidden = true; [cross, dA, dB].forEach(n => n.setAttribute("visibility", "hidden")); });
   }
 
   // ---------- unemployment estimate ----------
@@ -345,8 +558,8 @@
       </ul>
       <h2>Privacy</h2>
       <p>The whole site runs in your browser. There's no account, no tracking, and nothing you type is sent anywhere.</p>
-      <h2>Who made this, and how</h2>
-      <p>Abhinav Jagtap, a senior at Dublin High School, built this for Neighborhood Hacks 2026. It grew out of his published research on how unemployment insurance fits AI-driven job change, and a reskilling voucher pilot he proposed to the Dublin City Council. Abhinav used Claude, an AI assistant, to help write the code and gather the data. The data, code and the steps to rebuild it are <a href="https://github.com/AbhinavJag/next-step-tri-valley" target="_blank" rel="noopener">on GitHub</a>.</p>`;
+      <h2>Who made this</h2>
+      <p>Abhinav Jagtap, a senior at Dublin High School, built this. It grew out of his published research on how unemployment insurance fits AI-driven job change, and a reskilling voucher pilot he proposed to the Dublin City Council. The data, code and the steps to rebuild it are <a href="https://github.com/AbhinavJag/next-step-tri-valley" target="_blank" rel="noopener">on GitHub</a>.</p>`;
   }
 
   // ---------- boot ----------
