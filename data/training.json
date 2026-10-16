@@ -1,0 +1,43 @@
+{
+  "programs": [
+    {"name": "Accounting Technician", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["43-3031", "43-3051", "43-3021", "13-2011"]},
+    {"name": "Bookkeeping", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["43-3031", "43-3051"]},
+    {"name": "Administrative Medical Assistant", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["43-6013", "31-9092", "29-2072"]},
+    {"name": "Data Analytics", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["15-2051", "13-1161", "13-1111"]},
+    {"name": "Project Management", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["13-1082", "11-3012", "13-1111"]},
+    {"name": "IT Support Professional", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["15-1232", "15-1231"]},
+    {"name": "Network Support Professional", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["15-1231", "15-1244", "15-1241"]},
+    {"name": "Cybersecurity Professional", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["15-1212", "15-1244"]},
+    {"name": "Cloud Computing", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["15-1244", "15-1241"]},
+    {"name": "Web Development", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["15-1254", "15-1255"]},
+    {"name": "Supervisory Management", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["43-1011", "41-1011", "41-1012", "53-1047", "51-1011"]},
+    {"name": "Retail Management", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["41-1011", "41-2031"]},
+    {"name": "Associate Teacher (Early Care and Education)", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["25-2011", "39-9011", "25-9045", "11-9031"]},
+    {"name": "Early Childhood Intervention Assistant", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["25-9045", "25-2011"]},
+    {"name": "Emergency Medical Technologies (EMT)", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["29-2042", "29-2043"]},
+    {"name": "Automotive Master / Smog Technician", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["49-3023", "49-3031"]},
+    {"name": "Automotive Basic", "where": "Las Positas College (Continuing Education)", "type": "Certificate of Completion (noncredit)", "cost": "tuition-free", "leads_to": ["49-3023", "49-3093"]},
+    {"name": "Welding Technology", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["51-4121", "51-2041", "49-9071"]},
+    {"name": "Engineering Technology", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["17-3023", "17-3027", "17-3026", "17-3024"]},
+    {"name": "Occupational Safety and Health", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["19-5011", "19-5012"]},
+    {"name": "Fire Academy (Fire Suppression)", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["33-2011"]},
+    {"name": "21st Century Policing", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["33-3051", "33-9032"]},
+    {"name": "Landscape Maintenance and Construction", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["37-3011", "37-1012"]},
+    {"name": "Fitness Trainer", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["39-9031"]},
+    {"name": "Marketing", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["13-1161", "11-2021", "41-3091"]},
+    {"name": "Graphic Design", "where": "Las Positas College", "type": "Certificate of Achievement", "cost": "community college", "leads_to": ["27-1024", "43-9031"]},
+    {"name": "Customer Service", "where": "Las Positas College (Continuing Education)", "type": "Certificate of Completion (noncredit)", "cost": "tuition-free", "leads_to": ["43-4051", "43-4171", "41-2031"]},
+    {"name": "Small Business Management", "where": "Las Positas College (Continuing Education)", "type": "Certificate of Completion (noncredit)", "cost": "tuition-free", "leads_to": ["11-1021", "41-1011"]},
+    {"name": "Norcal Laborers Construction (apprenticeship)", "where": "Las Positas College with Northern California Laborers", "type": "Certificate of Achievement", "cost": "apprenticeship (paid while you learn)", "leads_to": ["47-2061", "47-4051"]}
+  ],
+  "help": [
+    {"name": "Tri-Valley Career Center", "what": "Free one-on-one career coaching, job search workshops, and connections to short-term training and training scholarships. Part of America's Job Center of California, run by Chabot-Las Positas Community College District for the Alameda County Workforce Development Board.", "where": "5860 Owens Drive, Pleasanton", "phone": "925-416-5100", "url": "https://laspositascollege.edu/careercenter/one-stop.php"},
+    {"name": "California Training Benefits (EDD)", "what": "Lets you keep getting unemployment while you're in approved training, without having to look for work. Ask EDD before your 16th week of benefits to qualify for extra weeks. EDD does not pay tuition.", "where": "Online or at any America's Job Center", "phone": "", "url": "https://edd.ca.gov/en/unemployment/california_training_benefits/"},
+    {"name": "California College Promise Grant", "what": "Waives community college enrollment fees for California residents who qualify by income or who receive certain benefits.", "where": "Apply through the Las Positas financial aid office", "phone": "", "url": "https://www.cccapply.org/en/money/california-college-promise-grant"},
+    {"name": "Las Positas College Continuing Education", "what": "Tuition-free noncredit certificates in customer service, small business, automotive and more. Some classes have a materials fee.", "where": "3000 Campus Hill Drive, Livermore", "phone": "", "url": "https://laspositascollege.edu/programs/noncredit.php"}
+  ],
+  "sources": {
+    "programs": "Las Positas College 2024-2025 Catalog, programs index (laspositascollege.edu/catalog/2024-2025/programs/index.pdf) and Continuing Education page",
+    "help": "Las Positas College Tri-Valley Career Center page; Hacienda Business Park, 'Tri-Valley Career Center Is Hidden Gem' (2023); EDD California Training Benefits page"
+  }
+}
