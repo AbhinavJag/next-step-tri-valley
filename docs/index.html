@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Next Step Tri-Valley</title>
+<meta name="description" content="A free tool for workers in Dublin, Pleasanton and Livermore. Look up your job's AI exposure, find nearby jobs that use your skills, local training, and your unemployment estimate.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231f6f5c'/%3E%3Cpath d='M9 21l6-6 4 4 5-7' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#/">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="currentColor"/><path d="M9 21l6-6 4 4 5-7" stroke="var(--bg)" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Next Step <b>Tri-Valley</b></span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#/" data-nav="job">Check your job</a>
+      <a href="#/benefits" data-nav="benefits">Unemployment estimate</a>
+      <a href="#/city" data-nav="city">For the city</a>
+      <a href="#/about" data-nav="about">About the data</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="wrap">
+  <!-- JOB VIEW -->
+  <section id="view-job" class="view">
+    <div class="hero">
+      <p class="eyebrow">For workers in Dublin, Pleasanton and Livermore</p>
+      <h1>Your job is changing.<br>Here's what's close by.</h1>
+      <p class="lede">Type your job. You'll see how much of it overlaps with what AI can do, what it pays here, the jobs that use the skills you already have, and where to train for them nearby. It's free and nothing you type leaves your browser.</p>
+      <div class="search" role="combobox" aria-expanded="false" aria-owns="suggest" aria-haspopup="listbox">
+        <label for="q" class="sr">Your job title</label>
+        <svg class="search-ic" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 20l-4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="q" type="search" autocomplete="off" placeholder="Try &quot;receptionist&quot;, &quot;bookkeeper&quot; or &quot;customer service&quot;" aria-autocomplete="list" aria-controls="suggest">
+        <ul id="suggest" role="listbox" hidden></ul>
+      </div>
+      <p class="try">Common in the Tri-Valley:
+        <button class="chip-btn" data-soc="43-9061">Office clerk</button>
+        <button class="chip-btn" data-soc="43-4051">Customer service</button>
+        <button class="chip-btn" data-soc="43-3031">Bookkeeping</button>
+        <button class="chip-btn" data-soc="43-6013">Medical secretary</button>
+        <button class="chip-btn" data-soc="41-2031">Retail sales</button>
+      </p>
+    </div>
+    <div id="result" aria-live="polite"></div>
+  </section>
+
+  <!-- BENEFITS VIEW -->
+  <section id="view-benefits" class="view" hidden>
+    <div class="page-head">
+      <p class="eyebrow">California unemployment insurance</p>
+      <h1>How much would unemployment pay me?</h1>
+      <p class="lede">California pays based on your best three-month stretch of pay in the past year and a half. This gives you a quick estimate using EDD's own benefit table. EDD makes the final call.</p>
+    </div>
+    <div class="grid-2">
+      <form class="card calc" id="calc" novalidate>
+        <fieldset>
+          <legend>How do you get paid?</legend>
+          <div class="seg" role="radiogroup">
+            <label><input type="radio" name="mode" value="hour" checked> By the hour</label>
+            <label><input type="radio" name="mode" value="year"> Yearly salary</label>
+            <label><input type="radio" name="mode" value="quarter"> I know my best quarter</label>
+          </div>
+        </fieldset>
+        <div class="field" data-mode="hour">
+          <label for="rate">Hourly pay</label>
+          <div class="money"><span>$</span><input id="rate" inputmode="decimal" value="25"></div>
+          <label for="hours">Hours a week</label>
+          <input id="hours" inputmode="decimal" value="40">
+        </div>
+        <div class="field" data-mode="year" hidden>
+          <label for="salary">Yearly pay before taxes</label>
+          <div class="money"><span>$</span><input id="salary" inputmode="decimal" value="55000"></div>
+        </div>
+        <div class="field" data-mode="quarter" hidden>
+          <label for="hq">Pay in your highest three months (one calendar quarter)</label>
+          <div class="money"><span>$</span><input id="hq" inputmode="decimal" value="13000"></div>
+        </div>
+        <p class="fine">Assumes you worked steadily all year. If your hours changed, use "I know my best quarter."</p>
+      </form>
+      <div class="card calc-out" id="calc-out" aria-live="polite"></div>
+    </div>
+    <div class="card note">
+      <h2>Want to train instead of just searching?</h2>
+      <p>Under <a href="https://edd.ca.gov/en/unemployment/california_training_benefits/" target="_blank" rel="noopener">California Training Benefits</a>, you can keep getting unemployment while you're in approved training, and you don't have to look for work while you're enrolled. You have to ask EDD <b>before your 16th week</b> of benefits to qualify for extra weeks. EDD doesn't pay tuition, so pair it with a fee waiver or a training scholarship from the Tri-Valley Career Center.</p>
+    </div>
+  </section>
+
+  <!-- CITY VIEW -->
+  <section id="view-city" class="view" hidden>
+    <div class="page-head">
+      <p class="eyebrow">For city council, staff and employers</p>
+      <h1>Who in our region is most exposed, and what would help</h1>
+      <p class="lede" id="city-lede"></p>
+    </div>
+    <div id="city"></div>
+  </section>
+
+  <!-- ABOUT VIEW -->
+  <section id="view-about" class="view" hidden>
+    <div class="page-head">
+      <p class="eyebrow">How this works</p>
+      <h1>About the data</h1>
+    </div>
+    <div class="prose" id="about"></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <p>Built by Abhinav Jagtap, Dublin High School, for Neighborhood Hacks 2026. Data from the U.S. Bureau of Labor Statistics, O*NET, and Felten, Raj and Seamans. Estimates only, not legal or financial advice.</p>
+    <p><a href="https://github.com/AbhinavJag/next-step-tri-valley" target="_blank" rel="noopener">Source code and data</a></p>
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
