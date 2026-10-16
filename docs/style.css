@@ -241,3 +241,4 @@ details summary { cursor: pointer; color: var(--brand); font-weight: 500; font-s
 .section-title h2 { font-size: 22px; letter-spacing: -.01em; }
 .card { border-radius: var(--r); }
 .stat { border-left: 4px solid var(--hero-2); border-radius: 6px; }
+#result { margin-top: 24px; }
