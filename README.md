@@ -10,11 +10,10 @@ A free tool for workers in Dublin, Pleasanton and Livermore, California. Type in
 - **Where to train nearby**, matched to programs at Las Positas College in Livermore
 - **Free help**, like the Tri-Valley Career Center and California Training Benefits
 
-It also has an **unemployment estimate** that uses EDD's benefit table, and a **For the city** page that shows local officials which workers are most exposed and what a small reskilling pilot would cover.
+It also has a **switch planner**, a calculator that compares training for a new job against going back to the same kind of work. It shows the out-of-pocket cost, what you'd live on while training, the new pay, and the month the switch pays you back, with a 5-year chart. There's also an **unemployment estimate** that uses EDD's benefit table, and a **For the city** page that shows local officials which workers are most exposed and what a small reskilling pilot would cover.
 
 Everything runs in your browser. There's no account, no tracking, and nothing you type is sent anywhere.
 
-Built for Neighborhood Hacks 2026.
 
 ## Why I built it
 
